@@ -1,0 +1,22 @@
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(22, 22, 22);
+}
+
+.container {
+    position: relative;
+    z-index: 1;
+    background-color: rgb(224, 201, 172);
+    padding: 1.5rem;
+    border-radius: 15px;
+    max-width: 620px;
+}
