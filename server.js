@@ -30,11 +30,11 @@ app.get('/search', async (req, res) => {
     try {
         const token = await getToken()
         const response = await fetch(
-            `https://api.spotify.com/v1/search?q=${artist}&type=artist&limit=1`,
+            `https://api.spotify.com/v1/search?q=${artist}&type=artist&limit=5`,
             { headers: { 'Authorization': `Bearer ${token}` } }
         )
         const data = await response.json()
-        res.json(data.artists.items[0])
+        res.json(data.artists.items)
     } catch (error) {
         res.status(500).json({ error: 'something went wrong' })
     }
@@ -46,7 +46,7 @@ app.get('/artist/:id/albums', async (req, res) => {
 
     try {
         const response = await fetch(
-            `https://api.spotify.com/v1/artists/${id}/albums`,
+            `https://api.spotify.com/v1/artists/${id}/albums?limit=10`,
             { headers: { 'Authorization': `Bearer ${token}` } }
         )
         const data = await response.json()
