@@ -9,17 +9,17 @@ body {
     background-color: #474747;
 }
 
-.search-header {
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-}
-
-#search-page {
+header {
+    position: relative;
+    top: 0;
     background: #1b1b1b;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: #fff;
-    padding: 2rem 0;
-    width: 100%;
+    gap: 2;
+    z-index: 10;
 }
 
 .hidden {
@@ -44,7 +44,6 @@ body {
     border: 1px solid grey;
     font-size: 16px;
     width: 400px;
-    min-width: 200px;
     background-color: #222;
     color: #fff;
 }
@@ -88,6 +87,14 @@ body {
 }
 
     /* Artist display */
+main {
+    width: 100vw;
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    color: #fff;
+}
+
 #artist-header {
     display: flex;
     align-items: center;
@@ -111,7 +118,7 @@ body {
 
 #albums-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 2fr));
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 1rem;
 }
 
@@ -120,6 +127,8 @@ body {
     background: #222;
     border-radius: 8px;
     padding: 8px;
+    display: flex;
+    flex-direction: column;
 }
 
 .album-card:hover {
@@ -132,6 +141,14 @@ body {
     margin-bottom: 6px;
 }
 
+.album-card h3 {
+    padding-top: 10px;
+}
+
 .album-card p {
     font-size: 13px; 
+    padding-top: 10px;
+    display: flex;
+    flex: 1;
+    align-items: end;
 }
