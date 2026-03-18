@@ -66,19 +66,19 @@ app.get('/artist/:id/albums', async (req, res) => {
     }
 })
 
-app.get('/albums/:id/tracks', async (req, res) => {
+app.get('/albums/:id', async (req, res) => {
     const token = await getToken()
     const id = req.params.id
 
     try {
         const response = await fetch(
-            `https://api.spotify.com/v1/albums/${id}/tracks`,
+            `https://api.spotify.com/v1/albums/${id}`,
             { headers: { 'Authorization': `Bearer ${token}` } }
         )
         const data = await response.json()
         res.json(data)
     } catch (error) {
-        res.status(500).json({ error: `something went wrong` })
+        res.status(500).json({ error: 'something went wrong'})
     }
 })
 

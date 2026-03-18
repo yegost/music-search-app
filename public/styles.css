@@ -212,3 +212,128 @@ main {
     color: var(--text-secondary);
     padding-top: 4px;
 }
+
+    /* Album page */
+#album-header {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.album-cover {
+    width: 180px;
+    height: 180px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 3px solid var(--accent);
+}
+
+.album-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    min-width: 200px;
+}
+
+.album-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#album-header > div:last-child p {
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#album-header h2 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-secondary)
+}
+
+.artist-row img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.artist-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#album-header a {
+    color:var(--text-primary);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+#album-header a:hover {
+    color: var(--accent);
+}
+
+#album-header > div:last-child > div:last-child {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+@media (max-width: 600px) {
+    #search-input {
+        width: 100%;
+        font-size: 12px;
+        min-width: 280px;
+    }
+
+    .search-wrapper {
+        width: 100%;
+    }
+
+    .search-bar {
+        width: 100%;
+    }
+
+    header {
+        padding: 1rem;
+    }
+
+    #artist-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #album-header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    #album-header > div:last-child p {
+        margin-bottom: 1rem;
+    }
+
+    #album-header h2 {
+    font-size: 18px;
+    margin-bottom: 1rem;
+    }
+
+    .album-info {
+        height: auto;
+        width: 100%;
+    }
+
+    .artist-row {
+        justify-content: center;
+    }
+}
