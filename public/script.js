@@ -7,6 +7,18 @@ const albumsSection = document.getElementById('albums-section');
 const background = document.querySelector('container');
 const mainBg = document.querySelector('main');
 
+function showPage(page) {
+    artistPage.classList.add('hidden')
+    headerText.classList.add('hidden')
+    mainBg.classList.remove('hidden')
+    page.classList.remove('hidden')
+}
+
+async function api(url) {
+    const res = await fetch(url)
+    return res.json()
+}
+
 let debounceTimer;
 
 searchBar.addEventListener('input', async () => {
@@ -18,11 +30,10 @@ searchBar.addEventListener('input', async () => {
     };
 
     debounceTimer = setTimeout(async () => {
-        const res = await fetch(`/search?artist=${artist}`);
-        const data = await res.json()
+        const artistData = await api(`/search?artist=${artist}`);
         
         results.innerHTML = ''
-        data.forEach(artist => {
+        artistData.forEach(artist => {
             results.innerHTML += `
                 <div class="artist-result" data-id="${artist.id}">
                     <img src="${artist.images[2]?.url || '/images/placeholder.png'}" alt="${artist.name}" />
@@ -47,8 +58,7 @@ results.addEventListener('click', async (e) => {
     const name = card.querySelector('p').textContent
     const image = card.querySelector('img').src
 
-    const albumsRes = await fetch(`/artist/${id}/albums`)
-    const albumsData = await albumsRes.json()
+    const albumsData = await api(`/artist/${id}/albums`)
 
     results.innerHTML = ''
     searchBar.value = ''
@@ -65,7 +75,7 @@ results.addEventListener('click', async (e) => {
         <div id="albums-grid">
             ${albumsData.items.map(album => `
                     <div class="album-card" data-id="${album.id}">
-                        <img src="${album.images[0]?.url || '/public/images/placeholder.png'}" alt="${album.name}" />
+                        <img src="${album.images[0]?.url || '/images/placeholder.png'}" alt="${album.name}" />
                         <h4 class="album-name">${album.name.length > 31
                             ? album.name.slice(0, 31) + '...'
                             : album.name
@@ -76,7 +86,5 @@ results.addEventListener('click', async (e) => {
         </div>
     `
 
-    headerText.classList.add('hidden')
-    mainBg.classList.remove('hidden')
-    artistPage.classList.remove('hidden')
+    showPage(artistPage)
 })
