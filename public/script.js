@@ -1,6 +1,11 @@
 const searchBar = document.getElementById('search-input');
 const results = document.getElementById('results');
 const headerText = document.getElementById('header-text');
+const artistPage = document.getElementById('artist-page');
+const artistHeader = document.getElementById('artist-header');
+const albumsSection = document.getElementById('albums-section');
+const background = document.querySelector('container');
+const mainBg = document.querySelector('main');
 
 let debounceTimer;
 
@@ -48,10 +53,6 @@ results.addEventListener('click', async (e) => {
     results.innerHTML = ''
     searchBar.value = ''
 
-    const artistPage = document.getElementById('artist-page')
-    const artistHeader = document.getElementById('artist-header')
-    const albumsSection = document.getElementById('albums-section')
-
     artistHeader.innerHTML = `
         <img id="artist-img" src="${image}" alt="${name}" />
         <div>
@@ -65,16 +66,17 @@ results.addEventListener('click', async (e) => {
             ${albumsData.items.map(album => `
                     <div class="album-card" data-id="${album.id}">
                         <img src="${album.images[0]?.url || '/public/images/placeholder.png'}" alt="${album.name}" />
-                        <h4>${album.name.length > 31
+                        <h4 class="album-name">${album.name.length > 31
                             ? album.name.slice(0, 31) + '...'
                             : album.name
                         }</h4>
-                        <p>${album.release_date.slice(0, 4)}</p>
+                        <p class="album-year">${album.release_date.slice(0, 4)}</p>
                     </div>
                 `).join('')}
         </div>
     `
 
     headerText.classList.add('hidden')
+    mainBg.classList.remove('hidden')
     artistPage.classList.remove('hidden')
 })
