@@ -150,14 +150,18 @@ albumsSection.addEventListener('click', async (e) => {
     `
 
     albumTracks.innerHTML = `
-        <div class="track-header"><span>#</span><span>Title</span><span>Time</span></div>
-        ${albumData.tracks.items.map(track => `
-            <div class="track-item">
-                <span class="track-number">${track.track_number}</span>
-                <span class="track-name">${track.name}</span>
-                <span class="track-duration">${formatDuration(track.duration_ms)}</span>
-            </div>    
-        `).join('')}
+        <div class="track-header">
+            <span>#</span>
+            <span>Title</span>
+            <span>Time</span>
+        </div>
+            ${albumData.tracks.items.map(track => `
+                <div class="track-item">
+                    <span class="track-number">${track.track_number}</span>
+                    <span class="track-name">${track.name}</span>
+                    <span class="track-duration">${formatDuration(track.duration_ms)}</span>
+                </div>    
+            `).join('')}
     `
 
     showPage(albumPage)
