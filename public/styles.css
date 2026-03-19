@@ -288,6 +288,29 @@ main {
     color: var(--text-secondary);
 }
 
+    /* Tracks section */
+.track-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 8px 8px 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+}
+
+.track-header span:first-child {
+    min-width: 20px;
+    text-align: right;
+}
+
+.track-header span:last-child {
+    margin-left: auto;
+}
+
 @media (max-width: 600px) {
     #search-input {
         width: 100%;

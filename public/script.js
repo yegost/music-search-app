@@ -8,6 +8,7 @@ const artistHeader = document.getElementById('artist-header')
 const albumsSection = document.getElementById('albums-section')
 const albumPage = document.getElementById('album-page')
 const albumHeader = document.getElementById('album-header')
+const albumTracks = document.getElementById('tracks-list')
 
 function showPage(page) {
     artistPage.classList.add('hidden')
@@ -146,6 +147,17 @@ albumsSection.addEventListener('click', async (e) => {
                 <div>${releaseDate} - ${albumData.total_tracks} ${albumData.total_tracks > 1 ? "Songs" : "Song"} - ${totalDuration(albumData.tracks.items)}</div>
             </div>
         </div>
+    `
+
+    albumTracks.innerHTML = `
+        <div class="track-header"><span>#</span><span>Title</span><span>Time</span></div>
+        ${albumData.tracks.items.map(track => `
+            <div class="track-item">
+                <span class="track-number">${track.track_number}</span>
+                <span class="track-name">${track.name}</span>
+                <span class="track-duration">${formatDuration(track.duration_ms)}</span>
+            </div>    
+        `).join('')}
     `
 
     showPage(albumPage)
