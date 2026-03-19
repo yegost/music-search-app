@@ -2,7 +2,6 @@ const mainBg = document.querySelector('main')
 const searchBar = document.getElementById('search-input')
 const results = document.getElementById('results')
 const headerText = document.getElementById('header-text')
-const background = document.querySelector('container')
 const artistPage = document.getElementById('artist-page')
 const artistHeader = document.getElementById('artist-header')
 const albumsSection = document.getElementById('albums-section')
@@ -10,12 +9,49 @@ const albumPage = document.getElementById('album-page')
 const albumHeader = document.getElementById('album-header')
 const albumTracks = document.getElementById('tracks-list')
 
-function showPage(page) {
-    artistPage.classList.add('hidden')
-    albumPage.classList.add('hidden')
-    headerText.classList.add('hidden')
-    mainBg.classList.remove('hidden')
-    page.classList.remove('hidden')
+let debounceTimer
+const state = {
+    currentArtist: null,
+    currentAlbum: null,
+    currentAlbums: null
+}
+
+async function api(url) {
+    const res = await fetch(url)
+    return res.json()
+}
+
+async function searchArtists(query) {
+    if (!query) return
+
+    try {
+        const response = await api(`/search?artist=${query}`) 
+        return response;
+    } catch(error) {
+        console.log(error)
+    }
+}
+
+async function getArtistAlbums(id) {
+    if (!id) return
+
+    try {
+        const response = await api(`/artist/${id}/albums`)
+        return response
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function getAlbumData(id) {
+    if (!id) return
+
+    try {
+        const response = await api(`/albums/${id}`)
+        return response
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 function formatDuration(ms) {
@@ -34,57 +70,19 @@ function totalDuration(tracks) {
     return formatDuration(totalMs)
 }
 
-async function api(url) {
-    const res = await fetch(url)
-    return res.json()
+function renderSearchResults(artists) {
+    results.innerHTML = '';
+    artists.forEach(artist => {
+        results.innerHTML += `
+            <div class="artist-result" data-id="${artist.id}" data-spotify-url="${artist.external_urls.spotify}">
+                <img src="${artist.images[2]?.url || '/images/placeholder.png'}" alt="${artist.name}" />
+                <p>${artist.name}</p>
+            </div>
+        `
+    })
 }
 
-let debounceTimer
-let currentArtist = null
-
-searchBar.addEventListener('input', async () => {
-    clearTimeout(debounceTimer)
-    const artist = searchBar.value
-    if (!artist) {
-        results.innerHTML = ''
-        return
-    };
-
-    debounceTimer = setTimeout(async () => {
-        const artistData = await api(`/search?artist=${artist}`)
-        
-        results.innerHTML = ''
-        artistData.forEach(artist => {
-            results.innerHTML += `
-                <div class="artist-result" data-id="${artist.id}" data-spotify-url="${artist.external_urls.spotify}">
-                    <img src="${artist.images[2]?.url || '/images/placeholder.png'}" alt="${artist.name}" />
-                    <p>${artist.name}</p>
-                </div>
-            `
-        })
-    }, 500)
-})
-
-searchBar.addEventListener('blur', () => {
-    setTimeout(() => {
-        results.innerHTML = ``
-    }, 150)
-})
-
-results.addEventListener('click', async (e) => {
-    const card = e.target.closest('.artist-result')
-    if (!card) return
-
-    
-    const id = card.dataset.id
-    const spotifyUrl = card.dataset.spotifyUrl
-    const name = card.querySelector('p').textContent
-    const image = card.querySelector('img').src
-    
-    currentArtist = { name, image, id, spotifyUrl }
-
-    const albumsData = await api(`/artist/${id}/albums`)
-
+function renderArtistPage(name, image, albumsData) {
     results.innerHTML = ''
     searchBar.value = ''
 
@@ -110,21 +108,9 @@ results.addEventListener('click', async (e) => {
                 `).join('')}
         </div>
     `
+}
 
-    showPage(artistPage)
-})
-
-albumsSection.addEventListener('click', async (e) => {
-    const card = e.target.closest('.album-card')
-    if (!card) return
-
-    const id = card.dataset.id
-    const albumImage = card.querySelector('img').src
-    const albumName = card.querySelector('h4').textContent
-    const releaseDate = card.querySelector('p').textContent
-
-    const albumData = await api(`/albums/${id}`)
-
+function renderAlbumPage(albumData, albumImage, albumName, releaseDate) {
     albumHeader.innerHTML = `
         <div>
             <img class="album-cover" src="${albumImage}" alt="${albumName}" />
@@ -136,8 +122,8 @@ albumsSection.addEventListener('click', async (e) => {
                 <div>
                     ${albumData.artists.length === 1
                         ? `<div class="artist-row">
-                                <img src="${currentArtist?.image || '/images/placeholder.png'}" alt="${albumData.artists[0].name}" />
-                                <a href="${currentArtist.spotifyUrl}" target="_blank"><strong>${currentArtist.name}</strong></a>
+                                <img src="${state.currentArtist?.image || '/images/placeholder.png'}" alt="${albumData.artists[0].name}" />
+                                <a href="${state.currentArtist.spotifyUrl}" target="_blank"><strong>${state.currentArtist.name}</strong></a>
                         </div>`
                         : `<div>
                                 ${albumData.artists.map(a => `<a href="${a.external_urls.spotify}" target="_blank">${a.name}</a>`).join(', ')}
@@ -156,6 +142,10 @@ albumsSection.addEventListener('click', async (e) => {
             <span>Time</span>
         </div>
             ${albumData.tracks.items.map(track => `
+                ${track.disc_number > 1 && track.track_number === 1
+                    ? `<div class="disc-header">Disc ${track.disc_number}</div>`
+                    : ''
+                }
                 <div class="track-item">
                     <span class="track-number">${track.track_number}</span>
                     <span class="track-name">${track.name}</span>
@@ -163,6 +153,68 @@ albumsSection.addEventListener('click', async (e) => {
                 </div>    
             `).join('')}
     `
+}
+
+function showPage(page) {
+    artistPage.classList.add('hidden')
+    albumPage.classList.add('hidden')
+    headerText.classList.add('hidden')
+    mainBg.classList.remove('hidden')
+    page.classList.remove('hidden')
+}
+
+searchBar.addEventListener('input', async () => {
+    clearTimeout(debounceTimer)
+    const artist = searchBar.value
+    if (!artist) {
+        results.innerHTML = ''
+        return
+    };
+
+    debounceTimer = setTimeout(async () => {
+        const artistData = await searchArtists(artist)
+        renderSearchResults(artistData)
+    }, 500)
+})
+
+searchBar.addEventListener('blur', () => {
+    setTimeout(() => {
+        results.innerHTML = ``
+    }, 150)
+})
+
+results.addEventListener('click', async (e) => {
+    const card = e.target.closest('.artist-result')
+    if (!card) return
+
+    
+    const id = card.dataset.id
+    const spotifyUrl = card.dataset.spotifyUrl
+    const name = card.querySelector('p').textContent
+    const image = card.querySelector('img').src
+    
+    state.currentArtist = { name, image, id, spotifyUrl }
+
+    const albumsData = await getArtistAlbums(id)
+    state.currentAlbums = albumsData
+    renderArtistPage(name, image, albumsData)
+    showPage(artistPage)
+})
+
+albumsSection.addEventListener('click', async (e) => {
+    const card = e.target.closest('.album-card')
+    if (!card) return
+
+    const id = card.dataset.id
+    const albumImage = card.querySelector('img').src
+    const albumName = card.querySelector('h4').textContent
+    const releaseDate = card.querySelector('p').textContent
+
+    const albumData = state.currentAlbum?.id === id
+        ? state.currentAlbum
+        : await getAlbumData(id)
+    state.currentAlbum = albumData
+    renderAlbumPage(albumData, albumImage, albumName, releaseDate)
 
     showPage(albumPage)
 })
