@@ -1,13 +1,14 @@
-const mainBg = document.querySelector('main')
 const searchBar = document.getElementById('search-input')
 const results = document.getElementById('results')
-const headerText = document.getElementById('header-text')
+const homePage = document.getElementById('home-page')
 const artistPage = document.getElementById('artist-page')
 const artistHeader = document.getElementById('artist-header')
 const albumsSection = document.getElementById('albums-section')
 const albumPage = document.getElementById('album-page')
 const albumHeader = document.getElementById('album-header')
 const albumTracks = document.getElementById('tracks-list')
+const backBtn = document.getElementById('btn-back')
+const artistBtn = document.getElementById('btn-artist')
 
 let debounceTimer
 const state = {
@@ -158,8 +159,7 @@ function renderAlbumPage(albumData, albumImage, albumName, releaseDate) {
 function showPage(page) {
     artistPage.classList.add('hidden')
     albumPage.classList.add('hidden')
-    headerText.classList.add('hidden')
-    mainBg.classList.remove('hidden')
+    homePage.classList.add('hidden')
     page.classList.remove('hidden')
 }
 
@@ -190,6 +190,7 @@ results.addEventListener('click', async (e) => {
     
     const id = card.dataset.id
     const spotifyUrl = card.dataset.spotifyUrl
+    const albumUrl = card.dataset.albumUrl
     const name = card.querySelector('p').textContent
     const image = card.querySelector('img').src
     
@@ -217,4 +218,17 @@ albumsSection.addEventListener('click', async (e) => {
     renderAlbumPage(albumData, albumImage, albumName, releaseDate)
 
     showPage(albumPage)
+})
+
+backBtn.addEventListener('click', () => {
+    artistPage.classList.add('hidden')
+    albumPage.classList.add('hidden')
+    homePage.classList.remove('hidden')
+})
+
+artistBtn.addEventListener('click', () => {
+    if (!state.currentArtist) return
+    albumPage.classList.add('hidden')
+    homePage.classList.add('hidden')
+    artistPage.classList.remove('hidden')
 })

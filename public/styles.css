@@ -38,6 +38,7 @@ hr {
 header {
     position: sticky;
     top: 0;
+    gap: 10px;
     background: var(--bg-secondary);
     padding: 1rem 2rem;
     display: flex;
@@ -48,11 +49,32 @@ header {
     border-bottom: 1px solid var(--border);
 }
 
-header h3 {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--accent);
-    letter-spacing: 1px;
+.nav-btn {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    border-radius: 6px;
+    width: 45px;
+    height: 45px;
+    font-size: 23px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.nav-btn:hover {
+    background: var(--bg-card);
+}
+
+.nav-btn:active {
+    scale: 90%;
+}
+
+.btn-img {
+    width: 30px;
+    height: 30px;
 }
 
     /* Search bar */
@@ -149,7 +171,8 @@ main {
 }
 
 .container-inner {
-    padding: 1.5rem 3rem 3rem 3rem;
+    padding: 0 3rem;
+    margin-bottom: 3rem;
 }
 
     /* Artist profile */
@@ -157,6 +180,7 @@ main {
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    margin: 2rem 0;
 }
 
 #artist-img {
@@ -224,6 +248,7 @@ main {
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    margin: 2rem 0;
     flex-wrap: wrap;
 }
 

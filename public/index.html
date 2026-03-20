@@ -9,30 +9,37 @@
     </head>
     <body>
         <header>
+            <button id="btn-artist" class="nav-btn">
+                <img class="btn-img" src="/images/backicon.png" alt="back button" />
+            </button>
             <div class="search-header">
                 <div class="search-wrapper">
-                    <h3 id="header-text">Search for an artist</h3>
                     <div class="search-bar">
                         <input type="text" id="search-input" placeholder="Who would you like to search...">
                     </div>
                     <div id="results"></div>
                 </div>
             </div>
+            <button id="btn-back" class="nav-btn">
+                <img class="btn-img" src="/images/homeicon.png" alt="home button" />
+            </button>
         </header>
-        <main class="hidden">
+        <main>
             <div class="container">
                 <div class="container-inner">
-                    <div id="artist-page" class="hidden">
+                    <section id="home-page">
+                        <h1>Search for an artist</h1>
+                    </section>
+                    <section id="artist-page" class="hidden">
                         <div id="artist-header"></div>
                         <hr>
                         <div id="albums-section"></div>
-                    </div>
-
-                    <div id="album-page" class="hidden">
+                    </section>
+                    <section id="album-page" class="hidden">
                         <div id="album-header"></div>
                         <hr>
                         <div id="tracks-list"></div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </main>
