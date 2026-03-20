@@ -190,7 +190,6 @@ results.addEventListener('click', async (e) => {
     
     const id = card.dataset.id
     const spotifyUrl = card.dataset.spotifyUrl
-    const albumUrl = card.dataset.albumUrl
     const name = card.querySelector('p').textContent
     const image = card.querySelector('img').src
     
