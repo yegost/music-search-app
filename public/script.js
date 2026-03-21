@@ -161,7 +161,7 @@ function renderAlbumPage(albumData, albumImage, albumName, releaseDate) {
         </div>
             ${albumData.tracks.items.map(track => `
                 ${track.track_number === 1 && track.disc_number >= 1 && albumData.tracks.items.filter(t => t.disc_number > 1).length > 0
-                    ? `<div class="disc-header">Disc ${track.disc_number}</div>`
+                    ? `<div class="disc-number">Disc ${track.disc_number}</div>`
                     : ''
                 }
                 <div class="track-item">

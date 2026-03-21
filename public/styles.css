@@ -377,7 +377,7 @@ main {
 }
 
     /* Tracks section */
-.disc-header {
+.disc-number {
     font-size: 13px;
     font-weight: 600;
     color: var(--text-secondary);
